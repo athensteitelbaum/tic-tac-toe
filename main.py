@@ -1,12 +1,12 @@
 from game import TicTacToeGame
-from player import Player
+from player import Player, AIRandomPlayer
 
 
 def main():
   game = TicTacToeGame()
   players = [
     Player("X"),
-    Player("O")
+    AIRandomPlayer("O")
   ]
   
   print("TIC-TAC-TOE!")
@@ -18,6 +18,8 @@ def main():
     game.print_board()
     if game.check_win(player.mark):
            print(f"Player {player.mark} wins!!!")
+           print("Lets Play agaon!")
+           game.reset_board()
            break
     
 

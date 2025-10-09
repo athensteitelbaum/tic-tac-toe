@@ -7,6 +7,16 @@ class TicTacToeGame:
         ]
         self.reset_board()
     
+    def get_available_spaces(self):
+        available_spaces = []
+        for row in range(3):
+            for col in range(3):
+                if self.board[row][col] == "_":
+                    available_spaces.append((row, col))
+
+        return available_spaces
+
+
     def mark_board(self, mark, row, col):
         self.board[row][col] = mark
 
