@@ -1,5 +1,6 @@
 import random
-
+from game import TicTacToeGame
+from copy import deepcopy
 
 class Player:
     def __init__(self, mark):
@@ -27,39 +28,24 @@ class AIRandomPlayer:
         return random.choice(spaces) if spaces else (0, 0)
 
 
-class PeakAheadAIPlayer:
+class PeakAheadAIPlayer (Player):
     def __init__(self, mark):
-        self.mark = mark
+        super().__init__(mark)
 
-    def get_move(self, game):
-        opponent = "O" if self.mark == "X" else "X"
-
-        # 1) Win if possible
-        move = self._find_winning_move(game, self.mark)
-        if move:
-            return move
-
-        # 2) Block opponent's winning move
-        move = self._find_winning_move(game, opponent)
-        if move:
-            return move
-
-        # 3) Prefer center, then corners, then random
-        if game.position_is_valid(1, 1):
-            return (1, 1)
-
-        for r, c in [(0, 0), (0, 2), (2, 0), (2, 2)]:
-            if game.position_is_valid(r, c):
-                return (r, c)
-
-        spaces = game.get_available_spaces()
-        return random.choice(spaces) if spaces else (0, 0)
-
-    def _find_winning_move(self, game, mark):
-        for r, c in game.get_available_spaces():
-            game.board[r][c] = mark
-            wins = game.check_win(mark)
-            game.board[r][c] = "_"  # revert
-            if wins:
-                return (r, c)
-        return None
+    def get_move(self,game):
+        available_spaces = game.get_available_spaces()
+        for row, col in available_spaces:
+            future_game = TicTacToeGame()
+            future_game.board = deepcopy(game.board)
+            future_game.board[row][col] = self.mark
+            if future_game.check_win(self.mark):
+                return (row, col)
+            opposite_mark = 'X' if self.mark == 'O' else 'O'
+            for row, col in available_spaces:
+             future_game = TicTacToeGame()
+             future_game.board = deepcopy(game.board)
+             future_game.board[row][col] = opposite_mark
+             if future_game.check_win(opposite_mark):
+                return (row, col)
+        row, col = random.choice(available_spaces)
+        return (row, col) 

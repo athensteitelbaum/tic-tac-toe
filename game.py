@@ -67,3 +67,7 @@ class TicTacToeGame:
             if test_marks.count(mark) == 3:
                 return True
         return False
+    
+    
+    def check_tie():
+        return False
